@@ -1,0 +1,6 @@
+# 安装包体积极大，只通过 Release 附件分发，不进 git
+*.apk
+*.zip
+
+# token 绝不入库
+.github_token
