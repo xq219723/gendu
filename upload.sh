@@ -20,10 +20,8 @@ ZIP="$(find "$DIR" -maxdepth 1 -iname '*.zip' | head -1)"
 [ -n "$ZIP" ] || { echo "未找到 zip"; exit 1; }
 
 # 若该版本已存在，先拒绝（避免重复 tag 造成混乱）
-if curl -s -o /dev/null -H "Authorization: Bearer $TOKEN" "$API/releases/tags/$TAG" | grep -q .; then
-  HTTP=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $TOKEN" "$API/releases/tags/$TAG")
-  [ "$HTTP" = "200" ] && { echo "Release $TAG 已存在，请换版本号或先删除"; exit 1; }
-fi
+HTTP=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $TOKEN" "$API/releases/tags/$TAG")
+[ "$HTTP" = "200" ] && { echo "Release $TAG 已存在，请换版本号或先删除"; exit 1; }
 
 echo "创建 Release $TAG ..."
 REL="$(curl -sS -X POST -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json" \
